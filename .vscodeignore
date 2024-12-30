@@ -1,7 +1,9 @@
 .vscode/**
 .vscode-test/**
 out/**
+node_modules
 node_modules/**
+src
 src/**
 .gitignore
 .yarnrc
@@ -12,3 +14,4 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/.vscode-test.*
+caw-extension-sidebar
