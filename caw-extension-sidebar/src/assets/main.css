@@ -1,0 +1,39 @@
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.p-button {
+  margin: 0.3rem 0;
+  padding: 0.5rem 0.75rem;
+  display: inline-flex;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--vscode-button-borderRadius);
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+}
+
+.p-button:enabled:hover {
+  background-color: var(--vscode-button-hoverBackground);
+  color: var(--vscode-button-hoverForeground);
+}
+
+.p-button:enabled:active {
+  background-color: var(--vscode-button-activeBackground);
+  color: var(--vscode-button-activeForeground);
+}
+
+.buttonContainer {
+  width: 100%;
+}

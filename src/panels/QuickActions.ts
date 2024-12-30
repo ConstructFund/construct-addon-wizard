@@ -1,72 +1,50 @@
 import * as vscode from "vscode";
-import shouldActivate from "../utils/shouldActivate";
+import fs from "fs";
+
+import { getQuickActions } from "../commands";
 
 export default class CawViewProvider implements vscode.WebviewViewProvider {
-  constructor(private context: vscode.ExtensionContext) {}
+  private panelHtmlPath: string;
+  private webviewView: vscode.WebviewView;
+  constructor(private context: vscode.ExtensionContext) {
+    this.context = context;
+  }
 
   resolveWebviewView(
     webviewView: vscode.WebviewView,
     context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken
   ) {
+    this.webviewView = webviewView;
     webviewView.webview.options = {
       enableScripts: true,
     };
+    this.panelHtmlPath = this.context.asAbsolutePath(
+      "src/html/QuickActions/index.html"
+    );
 
-    webviewView.webview.html = shouldActivate()
-      ? this.getWebviewContent()
-      : this.getDisabledWebviewContent();
+    fs.watch(this.panelHtmlPath, (event, filename) => {
+      if (event === "change") {
+        this.setWebviewContent();
+      }
+    });
 
-    webviewView.webview.onDidReceiveMessage(async (message) => {
-      switch (message.command) {
-        case "showMessage":
-          vscode.window.showInformationMessage(message.text);
-          break;
-        case "scaffoldProject":
-          vscode.commands.executeCommand("cawExtension.scaffoldNewProject");
+    this.setWebviewContent();
+  }
+
+  setWebviewContent() {
+    const panelHtml = fs.readFileSync(this.panelHtmlPath, "utf8");
+    this.webviewView.webview.html = panelHtml;
+    this.webviewView.webview.postMessage({
+      command: "setQuickActions",
+      quickActions: getQuickActions(),
+    });
+    this.webviewView.webview.onDidReceiveMessage(async (message) => {
+      switch (message.type) {
+        case "command":
+          vscode.commands.executeCommand(message.command);
           break;
       }
     });
-  }
-
-  getDisabledWebviewContent() {
-    return `
-            <!DOCTYPE html>
-            <html>
-            <body>
-                <h1>No CAW Project opened</h1>
-                <button onclick="scaffold()">Scaffold new project</button>
-                <script>
-                    const vscode = acquireVsCodeApi();
-                    function scaffold() {
-                        vscode.postMessage({
-                            command: 'scaffoldProject',
-                        });
-                    }
-                </script>
-            </body>
-            </html>
-        `;
-  }
-
-  getWebviewContent() {
-    return `
-            <!DOCTYPE html>
-            <html>
-            <body>
-                <h1>Hello from Side Panel!</h1>
-                <button onclick="sendMessage()">Send Message</button>
-                <script>
-                    const vscode = acquireVsCodeApi();
-                    function sendMessage() {
-                        vscode.postMessage({
-                            command: 'showMessage',
-                            text: 'Hello from Webview!'
-                        });
-                    }
-                </script>
-            </body>
-            </html>
-        `;
   }
 }

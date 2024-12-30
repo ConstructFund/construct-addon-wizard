@@ -23,7 +23,11 @@
     "commands": [
       {
         "command": "cawExtension.scaffoldNewProject",
-        "title": "New CAW Project"
+        "title": "CAW: New Project (Construct Addon Wizard)"
+      },
+      {
+        "command": "cawExtension.buildProject",
+        "title": "CAW: Build Project (Construct Addon Wizard)"
       }
     ],
     "viewsWelcome": [
@@ -51,11 +55,6 @@
           "id": "cawWebViewQuickActions",
           "type": "webview",
           "name": "Quick Actions"
-        },
-        {
-          "id": "cawWebViewInspector",
-          "type": "webview",
-          "name": "Inspector"
         }
       ]
     },
@@ -69,7 +68,14 @@
           "description": "The path to the Construct Addon Wizard preferred folder path"
         }
       }
-    }
+    },
+    "keybindings": [
+      {
+        "key": "f1",
+        "command": "cawExtension.buildProject",
+        "when": "config.workspaceKeybindings.cawKeybinds.enabled"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
