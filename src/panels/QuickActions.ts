@@ -20,7 +20,7 @@ export default class CawViewProvider implements vscode.WebviewViewProvider {
       enableScripts: true,
     };
     this.panelHtmlPath = this.context.asAbsolutePath(
-      "src/html/QuickActions/index.html"
+      "html/QuickActions/index.html"
     );
 
     fs.watch(this.panelHtmlPath, (event, filename) => {

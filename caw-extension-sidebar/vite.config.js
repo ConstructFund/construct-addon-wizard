@@ -23,7 +23,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: "../src/html/QuickActions",
+    outDir: "../html/QuickActions",
     emptyOutDir: true,
   },
 });
