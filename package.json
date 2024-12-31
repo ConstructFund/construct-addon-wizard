@@ -28,6 +28,10 @@
       {
         "command": "cawExtension.buildProject",
         "title": "CAW: Build Project (Construct Addon Wizard)"
+      },
+      {
+        "command": "cawExtension.generateLang",
+        "title": "CAW: Generate Language File (Construct Addon Wizard)"
       }
     ],
     "viewsWelcome": [

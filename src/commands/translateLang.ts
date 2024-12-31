@@ -17,7 +17,7 @@ export default async function translateLang(language: string | undefined) {
       progress.report({ increment: 0, message: "Saving files" });
       await vscode.commands.executeCommand("workbench.action.files.saveAll");
       progress.report({ increment: 10, message: "Building project" });
-      await vscode.commands.executeCommand("cawExtension.buildProject");
+      await vscode.commands.executeCommand("cawExtension.generateLang");
 
       progress.report({
         increment: 20,

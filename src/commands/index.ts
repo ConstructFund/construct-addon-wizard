@@ -3,6 +3,7 @@ import scaffold from "./scaffold";
 import build from "./build";
 import init from "./init";
 import translateLang from "./translateLang";
+import generateLang from "./generateLang";
 
 const commands = [
   {
@@ -32,6 +33,12 @@ const commands = [
     includeInQuickActions: true,
     title: "Translate Language",
     icon: "pi pi-globe",
+  },
+  {
+    command: "cawExtension.generateLang",
+    callback: generateLang,
+    includedInCommandPalette: true,
+    includeInQuickActions: false,
   },
 ];
 
