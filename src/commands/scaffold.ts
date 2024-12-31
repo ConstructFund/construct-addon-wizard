@@ -4,15 +4,12 @@ import path from "path";
 import degit from "degit";
 
 export default async function () {
-  vscode.window.showInformationMessage("Scaffolding new CAW project");
-
   // get input
   const projectName = await vscode.window.showInputBox({
     prompt: "Enter project name",
   });
 
   if (!projectName) {
-    vscode.window.showErrorMessage("No project name provided");
     return;
   }
 
@@ -20,9 +17,6 @@ export default async function () {
   let rootPath: string = vscode.workspace
     .getConfiguration("cawExtension")
     .get("preferredFolderPath");
-
-  console.log(rootPath);
-  console.log(vscode.workspace.getConfiguration("cawExtension"));
 
   if (!rootPath || !fs.existsSync(rootPath)) {
     // open folder picker
@@ -34,7 +28,6 @@ export default async function () {
     });
 
     if (!folder) {
-      vscode.window.showErrorMessage("No folder selected");
       return;
     }
 
@@ -52,6 +45,7 @@ export default async function () {
     }
   }
 
+  vscode.window.showInformationMessage("CAW: Scaffolding new project");
   // create folder
   const folderPath = path.join(rootPath, projectName);
   fs.mkdirSync(folderPath);

@@ -11,13 +11,19 @@ export default async function () {
   );
 
   if (fs.existsSync(nodeModulesPath)) {
-    vscode.window.showInformationMessage("CAW Extension activated");
+    await runTerminalCommand("npm run updateProjectData", false);
     return;
   }
 
   focusFile("config.caw.js");
-  vscode.window.showInformationMessage("Installing dependencies");
-  await runTerminalCommand("npm i");
-
-  vscode.window.showInformationMessage("Project created successfully");
+  await vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Notification,
+      title: "Installing dependencies...",
+      cancellable: false,
+    },
+    async () => {
+      await runTerminalCommand("npm run init");
+    }
+  );
 }

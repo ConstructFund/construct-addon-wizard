@@ -42,7 +42,7 @@ export default async function translateLang(language: string | undefined) {
       const [model] = await vscode.lm.selectChatModels();
       if (!model) {
         vscode.window.showErrorMessage(
-          "Could not use the translate feature. No chat model found"
+          "CAW: Could not use the translate feature. No chat model found"
         );
         return;
       }
@@ -72,7 +72,7 @@ export default async function translateLang(language: string | undefined) {
         vscode.Uri.file(filePath),
         Buffer.from(text)
       );
-      vscode.window.showInformationMessage("Translation completed");
+      vscode.window.showInformationMessage("CAW: Translation completed");
       // open file
 
       progress.report({ increment: 10, message: "Opening file" });

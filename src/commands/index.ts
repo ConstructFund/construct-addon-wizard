@@ -4,41 +4,55 @@ import build from "./build";
 import init from "./init";
 import translateLang from "./translateLang";
 import generateLang from "./generateLang";
+import shouldActivate from "../utils/shouldActivate";
+import openProject from "./openProject";
 
 const commands = [
   {
     command: "cawExtension.scaffoldNewProject",
+    title: "New Project",
     callback: scaffold,
     includedInCommandPalette: true,
     includeInQuickActions: false,
+    includeInNoProjectQuickActions: true,
+  },
+  {
+    command: "cawExtension.openProject",
+    title: "Open Project",
+    callback: openProject,
+    includedInCommandPalette: true,
+    includeInQuickActions: false,
+    includeInNoProjectQuickActions: true,
   },
   {
     command: "cawExtension.buildProject",
-    callback: build,
     title: "Build",
-    icon: "pi pi-cog",
+    callback: build,
     includedInCommandPalette: true,
     includeInQuickActions: true,
+    includeInNoProjectQuickActions: false,
   },
   {
     command: "cawExtension.init",
     callback: init,
     includedInCommandPalette: false,
     includeInQuickActions: false,
+    includeInNoProjectQuickActions: false,
   },
   {
     command: "cawExtension.translateLang",
+    title: "Translate Language",
     callback: translateLang,
     includedInCommandPalette: false,
     includeInQuickActions: true,
-    title: "Translate Language",
-    icon: "pi pi-globe",
+    includeInNoProjectQuickActions: false,
   },
   {
     command: "cawExtension.generateLang",
     callback: generateLang,
     includedInCommandPalette: true,
     includeInQuickActions: false,
+    includeInNoProjectQuickActions: false,
   },
 ];
 
@@ -51,12 +65,22 @@ export function getCommand(command: string) {
 }
 
 export function getQuickActions() {
+  if (!shouldActivate()) {
+    return commands
+      .filter((c) => c.includeInNoProjectQuickActions)
+      .map((x) => {
+        return {
+          label: x.title,
+          command: x.command,
+          keybind: vscode.workspace.getConfiguration().get(`caw.${x.command}`),
+        };
+      });
+  }
   return commands
     .filter((c) => c.includeInQuickActions)
     .map((x) => {
       return {
         label: x.title,
-        icon: x.icon,
         command: x.command,
         keybind: vscode.workspace.getConfiguration().get(`caw.${x.command}`),
       };
