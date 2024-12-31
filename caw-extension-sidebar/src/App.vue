@@ -34,13 +34,9 @@ function sendCommand(command) {
       :key="button.command"
       class="buttonContainer"
     >
-      <Button
-        :label="button.label"
-        @click="sendCommand(button.command)"
-        :icon="button.icon"
-        size="small"
-      />
-      <div v-if="button.keybind">{{ button.keybind }}</div>
+      <button @click="sendCommand(button.command)" class="p-button">
+        {{ button.label }}
+      </button>
     </div>
   </main>
 </template>
