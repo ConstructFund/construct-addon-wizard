@@ -1,14 +1,13 @@
 import * as vscode from "vscode";
 import fs from "fs";
 import path from "path";
+
+// @ts-nocheck
+
 export default async function () {
   let rootPath: string = vscode.workspace
     .getConfiguration("cawExtension")
     .get("preferredFolderPath");
-
-  // if root path exists, list all top level folders in a quick select, with an extra "Open Folder Picker" option
-  // if root path does not exist, open folder picker
-  // if no folder is selected, show error message
 
   if (rootPath && fs.existsSync(rootPath)) {
     let iconPerType = {

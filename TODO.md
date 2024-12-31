@@ -1,7 +1,1 @@
-- Vue for webview
-- Add buttons to the webview
-- Create command list
-- Make all commands
-- Figure out what to do with inspector
-- Figure out a way to get the data from the project into the webview
-- Look into getting started views
+- Make an addon with this thing
