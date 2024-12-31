@@ -62,6 +62,7 @@ export default async function () {
       {
         label: "",
         kind: -1,
+        // @ts-expect-error <message_explaining_use>
         value: "openFolderPicker",
       },
       {
@@ -78,10 +79,11 @@ export default async function () {
     if (!folder) {
       return;
     }
-
+    // @ts-expect-error <message_explaining_use>
     if (folder.value !== "openFolderPicker") {
       vscode.commands.executeCommand(
         "vscode.openFolder",
+        // @ts-expect-error <message_explaining_use>
         vscode.Uri.file(folder.value)
       );
       return;
