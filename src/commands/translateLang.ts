@@ -6,6 +6,11 @@ export default async function translateLang(language: string | undefined) {
     });
   }
 
+  if (!language) {
+    vscode.window.showErrorMessage("CAW: No language code provided");
+    return;
+  }
+
   // show loading indicator
   await vscode.window.withProgress(
     {
