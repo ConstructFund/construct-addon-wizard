@@ -1,6 +1,7 @@
 import vscode from "vscode";
 import scaffold from "./scaffold";
 import build from "./build";
+import devServer from "./devServer";
 import init from "./init";
 import translateLang from "./translateLang";
 import generateLang from "./generateLang";
@@ -33,6 +34,14 @@ const commands = [
     includeInNoProjectQuickActions: false,
   },
   {
+    command: "cawExtension.devServer",
+    title: "Start Dev Server",
+    callback: devServer,
+    includedInCommandPalette: true,
+    includeInQuickActions: true,
+    includeInNoProjectQuickActions: false,
+  },
+  {
     command: "cawExtension.init",
     callback: init,
     includedInCommandPalette: false,
@@ -55,6 +64,17 @@ const commands = [
     includeInNoProjectQuickActions: false,
   },
 ];
+
+function preventDoubleFire(command: Function, id: string) {
+  globalThis.__caw__preventDoubleFire =
+    globalThis.__caw__preventDoubleFire || {};
+  const lastCall = globalThis.__caw__preventDoubleFire[id];
+  if (lastCall && Date.now() - lastCall < 500) {
+    return;
+  }
+  globalThis.__caw__preventDoubleFire[id] = Date.now();
+  command();
+}
 
 export function getCommands() {
   return commands;
@@ -94,7 +114,9 @@ export function getCommandPalette() {
 export default function registerCommands(context: vscode.ExtensionContext) {
   commands.forEach((command) => {
     context.subscriptions.push(
-      vscode.commands.registerCommand(command.command, command.callback)
+      vscode.commands.registerCommand(command.command, () => {
+        preventDoubleFire(command.callback, command.command);
+      })
     );
   });
 }

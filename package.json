@@ -36,6 +36,10 @@
       {
         "command": "cawExtension.openProject",
         "title": "CAW: Open Project (Construct Addon Wizard)"
+      },
+      {
+        "command": "cawExtension.devServer",
+        "title": "CAW: Start Dev Server (Construct Addon Wizard)"
       }
     ],
     "viewsWelcome": [

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import fs from "fs";
 
-import { getQuickActions } from "../commands";
+import { getQuickActions } from "../commands/_index";
 
 export default class CawViewProvider implements vscode.WebviewViewProvider {
   private panelHtmlPath: string;

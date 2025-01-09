@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import QuickActionsProvider from "./panels/QuickActions";
 import InspectorProvider from "./panels/Inspector";
-import registerCommands from "./commands/index";
+import registerCommands from "./commands/_index";
 import shouldActivate from "./utils/shouldActivate";
 
 export function activate(context: vscode.ExtensionContext) {

@@ -1,14 +1,18 @@
 import * as vscode from "vscode";
-export default async function (command: string, showTerminal = true) {
+export default async function (
+  command: string,
+  showTerminal = true,
+  terminalName = "CAW Terminal"
+) {
   const window = vscode.window;
   return new Promise((resolve) => {
     const existingTerm = window.terminals.find(
-      (term) => term.name === "CAW Terminal"
+      (term) => term.name === terminalName
     );
     if (existingTerm) {
       existingTerm.dispose();
     }
-    const myTerm = window.createTerminal("CAW Terminal");
+    const myTerm = window.createTerminal(terminalName);
     if (showTerminal) {
       myTerm.show(true);
     }
