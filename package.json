@@ -40,16 +40,16 @@
       {
         "command": "cawExtension.devServer",
         "title": "CAW: Start Dev Server (Construct Addon Wizard)"
+      },
+      {
+        "command": "cawExtension.publish",
+        "title": "CAW: Publish (Construct Addon Wizard)"
       }
     ],
     "viewsWelcome": [
       {
         "view": "explorer",
-        "contents": "You can create a new Construct Addon Wizard project.\n[New CAW Project](command:cawExtension.scaffoldNewProject)"
-      },
-      {
-        "view": "welcomePage",
-        "contents": "You can create a new Construct Addon Wizard project.\n[New CAW Project](command:cawExtension.scaffoldNewProject)"
+        "contents": "[New CAW Project](command:cawExtension.scaffoldNewProject)\n[Open CAW Project](command:cawExtension.openProject)"
       }
     ],
     "viewsContainers": {

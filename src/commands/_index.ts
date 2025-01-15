@@ -7,6 +7,7 @@ import translateLang from "./translateLang";
 import generateLang from "./generateLang";
 import shouldActivate from "../utils/shouldActivate";
 import openProject from "./openProject";
+import publish from "./publish";
 
 const commands = [
   {
@@ -61,6 +62,14 @@ const commands = [
     callback: generateLang,
     includedInCommandPalette: true,
     includeInQuickActions: false,
+    includeInNoProjectQuickActions: false,
+  },
+  {
+    command: "cawExtension.publish",
+    title: "Publish",
+    callback: publish,
+    includedInCommandPalette: true,
+    includeInQuickActions: true,
     includeInNoProjectQuickActions: false,
   },
 ];
