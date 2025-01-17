@@ -8,6 +8,11 @@ export default async function () {
   let publishMode = await vscode.window.showQuickPick(
     [
       {
+        label: "No change",
+        detail: "Keep current version number",
+        value: "",
+      },
+      {
         label: "Major",
         detail: "(x._._._)",
         value: "major",
