@@ -2,7 +2,8 @@ import * as vscode from "vscode";
 export default async function translateLang(language: string | undefined) {
   if (!language) {
     language = await vscode.window.showInputBox({
-      prompt: "Enter the language code",
+      prompt: "Enter the language code, or a space-separated list of language codes",
+      placeHolder: "fr-FR de-DE es-ES",
     });
   }
 
