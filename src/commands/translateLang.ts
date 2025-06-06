@@ -19,13 +19,13 @@ export default async function translateLang(language: string | undefined) {
       cancellable: false,
     },
     async (progress) => {
-      progress.report({ increment: 0, message: "Saving files" });
+      progress.report({ increment: 5, message: "Saving files" });
       await vscode.commands.executeCommand("workbench.action.files.saveAll");
-      progress.report({ increment: 10, message: "Building project" });
+      progress.report({ increment: 5, message: "Building project" });
       await vscode.commands.executeCommand("cawExtension.generateLang");
 
       progress.report({
-        increment: 20,
+        increment: 5,
         message: "Getting english translation",
       });
       let englishFile =
@@ -35,9 +35,13 @@ export default async function translateLang(language: string | undefined) {
         vscode.Uri.file(englishFile)
       );
 
-      progress.report({ increment: 10, message: "Getting language model" });
+      progress.report({ increment: 5, message: "Getting language model" });
 
-      const craftedPrompt = [
+      const languageList = language.split(" ").filter((l) => l.length > 0);
+      const totalProg = 70;
+      const increment = totalProg / languageList.length;
+      for (const language of languageList) {
+        const craftedPrompt = [
         vscode.LanguageModelChatMessage.User(
           "You are a translator, I send you files to translate and you reply ONLY with the translated content. Translate the content of the following file to the following language " +
             language
@@ -52,7 +56,7 @@ export default async function translateLang(language: string | undefined) {
         return;
       }
 
-      progress.report({ increment: 10, message: "Requesting translation" });
+      progress.report({ increment: increment/4, message: "Requesting translation" });
 
       const chatResponse = await model.sendRequest(
         craftedPrompt,
@@ -60,7 +64,7 @@ export default async function translateLang(language: string | undefined) {
         new vscode.CancellationTokenSource().token
       );
 
-      progress.report({ increment: 10, message: "Translating" });
+      progress.report({ increment: increment/4, message: "Translating" });
       let text = "";
       for await (const fragment of chatResponse.text) {
         text += fragment;
@@ -72,18 +76,19 @@ export default async function translateLang(language: string | undefined) {
         language +
         ".json";
 
-      progress.report({ increment: 10, message: "Saving translation to file" });
+      progress.report({ increment: increment/4, message: "Saving translation to file" });
       await vscode.workspace.fs.writeFile(
         vscode.Uri.file(filePath),
         Buffer.from(text)
       );
-      vscode.window.showInformationMessage("CAW: Translation completed");
-      // open file
 
-      progress.report({ increment: 10, message: "Opening file" });
+      progress.report({ increment: increment/4, message: "Opening file" });
 
       let doc = await vscode.workspace.openTextDocument(filePath);
       vscode.window.showTextDocument(doc);
+      }
+      vscode.window.showInformationMessage("CAW: Translation completed");
+      // open file
     }
   );
 }
