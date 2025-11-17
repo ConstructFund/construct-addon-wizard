@@ -2,7 +2,7 @@
   "name": "caw",
   "displayName": "Construct Addon Wizard",
   "description": "An extension to make creating Construct 3 Addons magically simple",
-  "version": "0.7.0",
+  "version": "0.6.1",
   "publisher": "skymen",
   "repository": {
     "type": "git",
