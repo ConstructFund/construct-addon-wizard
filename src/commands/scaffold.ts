@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import degit from "degit";
 
-export default async function () {
+export default async function (context?: any) {
   // get input
   const projectName = await vscode.window.showInputBox({
     prompt: "Enter project name",

@@ -3,7 +3,7 @@ import runTerminalCommand from "../utils/runTerminalCommand";
 
 // @ts-nocheck
 
-export default async function () {
+export default async function (context?: any) {
   let publishVersion = "";
   let publishMode = await vscode.window.showQuickPick(
     [

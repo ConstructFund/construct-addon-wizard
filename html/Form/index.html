@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'unsafe-inline'; script-src 'nonce-{{nonce}}';"
+    />
+    <title>Form</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: var(--vscode-font-family);
+        font-size: var(--vscode-font-size);
+        color: var(--vscode-foreground);
+        background-color: var(--vscode-editor-background);
+      }
+
+      .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .form-header {
+        margin-bottom: 30px;
+      }
+
+      .form-header h1 {
+        margin: 0 0 10px 0;
+        font-size: 24px;
+        font-weight: 400;
+        color: var(--vscode-foreground);
+      }
+
+      .form-description {
+        margin: 0;
+        color: var(--vscode-descriptionForeground);
+        line-height: 1.5;
+      }
+
+      .form-steps {
+        margin-bottom: 20px;
+      }
+
+      .form-step {
+        display: none;
+      }
+
+      .form-step.active {
+        display: block;
+      }
+
+      .step-header {
+        margin-bottom: 24px;
+      }
+
+      .step-header h2 {
+        margin: 0 0 8px 0;
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--vscode-foreground);
+      }
+
+      .step-description {
+        margin: 0;
+        color: var(--vscode-descriptionForeground);
+        line-height: 1.4;
+      }
+
+      .step-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .form-field {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        margin-bottom: 6px;
+        font-weight: 500;
+        color: var(--vscode-foreground);
+        display: block;
+      }
+
+      .required-mark {
+        color: var(--vscode-errorForeground);
+        margin-left: 2px;
+      }
+
+      .field-description {
+        margin: 0 0 8px 0;
+        font-size: 12px;
+        color: var(--vscode-descriptionForeground);
+        line-height: 1.4;
+      }
+
+      .field-validation-message {
+        margin: 4px 0 0 0;
+        font-size: 11px;
+        color: var(--vscode-descriptionForeground);
+        font-style: italic;
+      }
+
+      input[type="text"],
+      textarea,
+      select {
+        padding: 6px 8px;
+        background-color: var(--vscode-input-background);
+        color: var(--vscode-input-foreground);
+        border: 1px solid var(--vscode-input-border, transparent);
+        font-family: var(--vscode-font-family);
+        font-size: var(--vscode-font-size);
+        outline: none;
+      }
+
+      input[type="text"]:focus,
+      textarea:focus,
+      select:focus {
+        border-color: var(--vscode-focusBorder);
+      }
+
+      input[type="text"]::placeholder,
+      textarea::placeholder {
+        color: var(--vscode-input-placeholderForeground);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      select {
+        cursor: pointer;
+      }
+
+      /* Checkbox styling */
+      .checkbox-label {
+        display: flex;
+        align-items: flex-start;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      input[type="checkbox"] {
+        margin: 2px 8px 0 0;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+
+      .checkbox-label span {
+        flex: 1;
+      }
+
+      /* Navigation */
+      .form-navigation {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--vscode-panel-border);
+      }
+
+      .step-indicator {
+        flex: 1;
+        text-align: center;
+        color: var(--vscode-descriptionForeground);
+        font-size: 13px;
+      }
+
+      .button {
+        padding: 8px 16px;
+        font-family: var(--vscode-font-family);
+        font-size: var(--vscode-font-size);
+        border: none;
+        cursor: pointer;
+        outline: none;
+        border-radius: 2px;
+        transition: background-color 0.1s;
+      }
+
+      .button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .button.primary {
+        background-color: var(--vscode-button-background);
+        color: var(--vscode-button-foreground);
+      }
+
+      .button.primary:hover:not(:disabled) {
+        background-color: var(--vscode-button-hoverBackground);
+      }
+
+      .button.secondary {
+        background-color: var(--vscode-button-secondaryBackground);
+        color: var(--vscode-button-secondaryForeground);
+      }
+
+      .button.secondary:hover:not(:disabled) {
+        background-color: var(--vscode-button-secondaryHoverBackground);
+      }
+
+      /* Validation error */
+      input:invalid,
+      textarea:invalid,
+      select:invalid {
+        border-color: var(--vscode-inputValidation-errorBorder);
+      }
+
+      .error-message {
+        color: var(--vscode-errorForeground);
+        font-size: 12px;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Form will be rendered here -->
+    </div>
+
+    <script nonce="{{nonce}}">
+      const vscode = acquireVsCodeApi();
+      let currentStep = 0;
+      let totalSteps = 0;
+
+      // Get form data from all fields
+      function getFormData() {
+        const data = {};
+        const fields = document.querySelectorAll("input, select, textarea");
+
+        fields.forEach((field) => {
+          if (field.type === "checkbox") {
+            data[field.id] = field.checked;
+          } else {
+            data[field.id] = field.value;
+          }
+        });
+
+        return data;
+      }
+
+      // Validate current step
+      function validateCurrentStep() {
+        const currentStepEl = document.querySelector(
+          `.form-step[data-step="${currentStep}"]`
+        );
+        if (!currentStepEl) return true;
+
+        const fields = currentStepEl.querySelectorAll(
+          "input[required], select[required], textarea[required]"
+        );
+        let isValid = true;
+
+        fields.forEach((field) => {
+          if (field.type === "checkbox") {
+            if (field.required && !field.checked) {
+              isValid = false;
+            }
+          } else {
+            if (!field.value.trim()) {
+              isValid = false;
+            }
+          }
+        });
+
+        return isValid;
+      }
+
+      // Show specific step
+      function showStep(step) {
+        const steps = document.querySelectorAll(".form-step");
+        steps.forEach((stepEl, index) => {
+          stepEl.classList.toggle("active", index === step);
+        });
+
+        currentStep = step;
+        updateNavigation();
+      }
+
+      // Update navigation buttons
+      function updateNavigation() {
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const submitBtn = document.getElementById("submitBtn");
+        const currentStepEl = document.getElementById("currentStep");
+
+        prevBtn.disabled = currentStep === 0;
+        currentStepEl.textContent = currentStep + 1;
+
+        const isValid = validateCurrentStep();
+
+        if (currentStep === totalSteps - 1) {
+          nextBtn.style.display = "none";
+          submitBtn.style.display = "inline-block";
+          submitBtn.disabled = !isValid;
+        } else {
+          nextBtn.style.display = "inline-block";
+          submitBtn.style.display = "none";
+          nextBtn.disabled = !isValid;
+        }
+      }
+
+      // Initialize form
+      function initForm() {
+        const steps = document.querySelectorAll(".form-step");
+        totalSteps = steps.length;
+        document.getElementById("totalSteps").textContent = totalSteps;
+
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const submitBtn = document.getElementById("submitBtn");
+
+        prevBtn.addEventListener("click", () => {
+          if (currentStep > 0) {
+            showStep(currentStep - 1);
+            vscode.postMessage({ type: "stepChanged", step: currentStep });
+          }
+        });
+
+        nextBtn.addEventListener("click", () => {
+          if (currentStep < totalSteps - 1 && validateCurrentStep()) {
+            showStep(currentStep + 1);
+            vscode.postMessage({ type: "stepChanged", step: currentStep });
+          }
+        });
+
+        submitBtn.addEventListener("click", () => {
+          if (validateCurrentStep()) {
+            const data = getFormData();
+            vscode.postMessage({ type: "formSubmit", data });
+          }
+        });
+
+        // Listen for input changes to update button states
+        document.addEventListener("input", () => {
+          updateNavigation();
+        });
+
+        updateNavigation();
+      }
+
+      // Wait for form to be rendered
+      window.addEventListener("DOMContentLoaded", () => {
+        // Small delay to ensure form is rendered
+        setTimeout(() => {
+          const formContainer = document.querySelector(".form-container");
+          if (formContainer) {
+            initForm();
+          }
+        }, 100);
+      });
+
+      // Notify extension that webview is ready
+      vscode.postMessage({ type: "ready" });
+    </script>
+  </body>
+</html>

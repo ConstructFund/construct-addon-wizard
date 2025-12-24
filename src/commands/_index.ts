@@ -8,6 +8,7 @@ import generateLang from "./generateLang";
 import shouldActivate from "../utils/shouldActivate";
 import openProject from "./openProject";
 import publish from "./publish";
+import { openDemoForm } from "./openDemoForm";
 
 const commands = [
   {
@@ -72,6 +73,14 @@ const commands = [
     includeInQuickActions: true,
     includeInNoProjectQuickActions: false,
   },
+  {
+    command: "cawExtension.openDemoForm",
+    title: "Open Demo Form",
+    callback: openDemoForm,
+    includedInCommandPalette: true,
+    includeInQuickActions: false,
+    includeInNoProjectQuickActions: true,
+  },
 ];
 
 function preventDoubleFire(command: Function, id: string) {
@@ -124,7 +133,7 @@ export default function registerCommands(context: vscode.ExtensionContext) {
   commands.forEach((command) => {
     context.subscriptions.push(
       vscode.commands.registerCommand(command.command, () => {
-        preventDoubleFire(command.callback, command.command);
+        preventDoubleFire(() => command.callback(context), command.command);
       })
     );
   });

@@ -4,7 +4,7 @@ import path from "path";
 
 // @ts-nocheck
 
-export default async function () {
+export default async function (context?: any) {
   let rootPath: string = vscode.workspace
     .getConfiguration("cawExtension")
     .get("preferredFolderPath");
