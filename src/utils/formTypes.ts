@@ -78,6 +78,7 @@ export interface FormDefinition {
 	description?: string;
 	steps: FormStep[];
 	onSubmit?: (data: Record<string, any>) => void | Promise<void>;
+	customScript?: string; // Custom JavaScript to inject into the form
 }
 
 /**

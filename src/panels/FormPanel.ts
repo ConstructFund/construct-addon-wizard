@@ -206,6 +206,12 @@ export class FormPanel {
 			`<div id="app">${formHtml}`
 		);
 
+		// Inject custom script if provided
+		if (this._formDefinition.customScript) {
+			const scriptTag = `<script nonce="${nonce}">\n${this._formDefinition.customScript}\n</script>`;
+			html = html.replace('</body>', `${scriptTag}</body>`);
+		}
+
 		return html;
 	}
 
