@@ -8,7 +8,6 @@ import generateLang from "./generateLang";
 import shouldActivate from "../utils/shouldActivate";
 import openProject from "./openProject";
 import publish from "./publish";
-import { openDemoForm } from "./openDemoForm";
 
 const commands = [
   {
