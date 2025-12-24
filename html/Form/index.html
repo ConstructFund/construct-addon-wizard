@@ -313,6 +313,25 @@
           submitBtn.style.display = "none";
           nextBtn.disabled = !isValid;
         }
+
+        // Focus the first input element in the current step
+        focusFirstField();
+      }
+
+      // Focus the first input/select/textarea in the current step
+      function focusFirstField() {
+        const currentStepEl = document.querySelector(
+          `.form-step[data-step="${currentStep}"]`
+        );
+        if (!currentStepEl) return;
+
+        const firstField = currentStepEl.querySelector(
+          "input:not([type='checkbox']), select, textarea"
+        );
+        if (firstField) {
+          // Small delay to ensure rendering is complete
+          setTimeout(() => firstField.focus(), 10);
+        }
       }
 
       // Initialize form
