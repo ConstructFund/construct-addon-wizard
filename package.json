@@ -78,6 +78,12 @@
           "default": "",
           "scope": "machine",
           "description": "The path to the Construct Addon Wizard preferred folder path"
+        },
+        "cawExtension.lastAuthorName": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "description": "The last used author name for new projects"
         }
       }
     },

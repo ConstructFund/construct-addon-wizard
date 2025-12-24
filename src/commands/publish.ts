@@ -143,7 +143,7 @@ export default async function (context?: any) {
   const existingChangelog = changelogData[newVersion] || { added: '', changed: '', fixed: '' };
 
   // Create and show the changelog form
-  const changelogForm = createForm('changelog', `Changelog for v${newVersion}`)
+  const changelogForm = createForm('changelog', `Changelog Wizard for v${newVersion}`)
     .description('Provide changelog information for this release')
     .addStep('changelog', 'What changed?')
     .stepDescription('All fields are optional')

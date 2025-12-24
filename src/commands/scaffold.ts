@@ -50,10 +50,15 @@ export default async function (context?: any) {
     }
   }
 
+  // Get last used author name from settings
+  const lastAuthor = vscode.workspace
+    .getConfiguration("cawExtension")
+    .get<string>("lastAuthorName", "");
+
   // Create the form definition
   const scaffoldForm: FormDefinition = {
     id: 'scaffoldProject',
-    title: 'New Construct Addon Project',
+    title: 'Construct Addon Wizard',
     description: 'Create a new Construct 3 addon project',
     steps: [
       {
@@ -75,6 +80,7 @@ export default async function (context?: any) {
             type: 'text',
             required: true,
             placeholder: 'Your Name',
+            defaultValue: lastAuthor,
             description: 'Your name or organization'
           },
           {
@@ -116,7 +122,6 @@ export default async function (context?: any) {
             id: 'pluginType',
             label: 'Plugin Type',
             type: 'dropdown',
-            required: true,
             defaultValue: 'OBJECT',
             options: [
               { label: 'World (2D objects in the layout)', value: 'WORLD' },
@@ -203,6 +208,14 @@ export default async function (context?: any) {
           // Show/hide plugin type based on addon type
           if (pluginTypeFieldContainer) {
             pluginTypeFieldContainer.style.display = isPlugin ? 'flex' : 'none';
+            // Toggle required attribute based on visibility
+            if (pluginTypeField) {
+              if (isPlugin) {
+                pluginTypeField.setAttribute('required', 'required');
+              } else {
+                pluginTypeField.removeAttribute('required');
+              }
+            }
           }
 
           // Update category options based on addon type
@@ -253,6 +266,11 @@ export default async function (context?: any) {
     context.extensionUri,
     scaffoldForm,
     async (data) => {
+      // Save the author name to settings for future use
+      await vscode.workspace
+        .getConfiguration("cawExtension")
+        .update("lastAuthorName", data.author, true);
+
       const projectName = toSnakeCase(data.addonName);
       const folderPath = path.join(rootPath, projectName);
 

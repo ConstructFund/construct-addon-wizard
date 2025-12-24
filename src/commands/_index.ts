@@ -73,14 +73,6 @@ const commands = [
     includeInQuickActions: true,
     includeInNoProjectQuickActions: false,
   },
-  {
-    command: "cawExtension.openDemoForm",
-    title: "Open Demo Form",
-    callback: openDemoForm,
-    includedInCommandPalette: true,
-    includeInQuickActions: false,
-    includeInNoProjectQuickActions: true,
-  },
 ];
 
 function preventDoubleFire(command: Function, id: string) {
