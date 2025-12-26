@@ -290,6 +290,9 @@
 
         currentStep = step;
         updateNavigation();
+
+        // Focus the first input element in the current step
+        focusFirstField();
       }
 
       // Update navigation buttons
@@ -313,9 +316,6 @@
           submitBtn.style.display = "none";
           nextBtn.disabled = !isValid;
         }
-
-        // Focus the first input element in the current step
-        focusFirstField();
       }
 
       // Focus the first input/select/textarea in the current step
@@ -370,7 +370,8 @@
           updateNavigation();
         });
 
-        updateNavigation();
+        // Initial step
+        showStep(0);
       }
 
       // Wait for form to be rendered
